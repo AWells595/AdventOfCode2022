@@ -3,12 +3,13 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class CraneMovements {
+    // This is some of the most cursed code I will ever write
     private Map<Integer, LinkedList<String>> positionnMap = new HashMap<>();
-    private ArrayList<String> startingPositionsFileContents = new ArrayList<>();
-    private Map<Integer, String> stringMap = new HashMap<>();
+    private ArrayList<String> startingPositionsFromFile = new ArrayList<>();
+    private ArrayList<String> movemntsFromFile = new ArrayList<>();
+    private Map<Integer, ArrayList<Integer>> moveCommands = new HashMap<>();
     private String topPositions;
-    private String[] splitString;
-    private String[] verySplitString;
+
 
     public CraneMovements() {
         this.topPositions = "";
@@ -17,61 +18,109 @@ public class CraneMovements {
     public void readStatingPositions() throws FileNotFoundException {
         File file = new File("src/Resources/StartingPositions.txt");
         Scanner scnr = new Scanner(file);
-        String tempString = "";
-        while(scnr.hasNext()) {
-            startingPositionsFileContents.add(scnr.nextLine());
+        Map<Integer, String[]> tempMap = new HashMap<>();
+        LinkedList<String> tempLL = null;
+
+        while(scnr.hasNextLine()){
+            startingPositionsFromFile.add(scnr.nextLine());
         }
-        splitString = new String[startingPositionsFileContents.size()];
-        for (String startingPositionsFileContent : startingPositionsFileContents) {
-            splitString = startingPositionsFileContent.split("\\[");
-            for (String s : splitString) {
-                if (s != null) {
-                    s = s.replace(']', ' ');
-                    verySplitString = s.split("\s");
-                    int i = 0;
-                    for(String v:verySplitString){
-                        if(v.equals("1") || v.equals("2") || v.equals("3") ||
-                                v.equals("4") || v.equals("5") || v.equals("6") ||
-                                v.equals("7") || v.equals("8") || v.equals("9")){
-                            stringMap.put(i++, tempString);
-                            tempString = "";
-                        }
-                        tempString = v + tempString;
-                        System.out.println(tempString);
-                    }
+        int i = 0;
+
+        for(String s:startingPositionsFromFile){
+            tempMap.put(i++, s.split("\s"));
+        }
+
+        i = 1;
+        for(String[] value:tempMap.values()){
+            tempLL = new LinkedList<>(Arrays.asList(value)); // sexy
+            positionnMap.put(i++, tempLL);
+        }
+    }
+
+    public void readMovements() throws FileNotFoundException {
+        File file = new File("src/resources/Movements.txt");
+        Scanner scnr = new Scanner(file);
+        while(scnr.hasNext()) {
+            movemntsFromFile.add(scnr.nextLine());
+        }
+
+        for(int i = 0; i < movemntsFromFile.size(); i++){
+            ArrayList<Integer> intList = new ArrayList<>();
+            String[] temp;
+            temp = movemntsFromFile.get(i).split("\s");
+
+            intList.add(Integer.valueOf(temp[1]));
+            intList.add(Integer.valueOf(temp[3]));
+            intList.add(Integer.valueOf(temp[5]));
+
+            moveCommands.put(i + 1, intList);
+        }
+
+    }
+
+    public void moveItems() throws FileNotFoundException {
+        readStatingPositions();
+        int numItems, moveFrom, moveTo;
+        String itemMoved;
+        for(ArrayList<Integer> list:moveCommands.values()){
+            numItems = list.get(0);
+            moveFrom = list.get(1);
+            moveTo = list.get(2);
+
+            for(int i = 0; i < numItems; i++){
+                itemMoved = positionnMap.get(moveFrom).getFirst();
+                positionnMap.get(moveFrom).removeFirst();
+                positionnMap.get(moveTo).addFirst(itemMoved);
+            }
+        }
+    }
+
+    public void moveMultipleItems() {
+        //
+        int numItems, moveFrom, moveTo;
+        for(ArrayList<Integer> list:moveCommands.values()) {
+            numItems = list.get(0);
+            moveFrom = list.get(1);
+            moveTo = list.get(2);
+            ArrayList<String> itemsMoved = new ArrayList<>();
+            for(int j = 0; j < numItems; j++){
+                if(numItems > positionnMap.get(moveFrom).size()){
+                    numItems = positionnMap.get(moveFrom).size();
+                }
+                for(int k = numItems - 1; k >= 0; k--) {
+                    itemsMoved.add(positionnMap.get(moveFrom).get(k));
+                }
+                for(int k = 0; k < numItems; k++){
+                    positionnMap.get(moveFrom).removeFirst();
+                }
+                for(int k = 0; k < numItems; k++){
+                    positionnMap.get(moveTo).addFirst(itemsMoved.get(k));
                 }
             }
-            for(String value:stringMap.values()){
-                System.out.println(value);
-            }
         }
     }
 
-    public void createLinkedLists() throws FileNotFoundException {
-        String currentString = "";
-        LinkedList<String> tempList = new LinkedList<>();
-        readStatingPositions();
-        int j = 0;
-        for(int i = 0; i < verySplitString.length; i++){
-            if(verySplitString[i].equals("1") || verySplitString[i].equals("2") || verySplitString[i].equals("3") ||
-                    verySplitString[i].equals("4") || verySplitString[i].equals("5") || verySplitString[i].equals("6") ||
-                    verySplitString[i].equals("7") || verySplitString[i].equals("8") || verySplitString[i].equals("9")){
-                positionnMap.put(i + 1, tempList);
-            }
-            else{
-                System.out.println(verySplitString[i]);
-                tempList.add(verySplitString[i]);
-                System.out.println(tempList);
-            }
+    public String  getFirstItems() throws FileNotFoundException {
+        moveItems();
+        for(Integer line:positionnMap.keySet()){
+            topPositions = positionnMap.get(line).getFirst() + topPositions;
         }
-        System.out.println(positionnMap.get(1));
+        return topPositions;
     }
 
+    public String getItemsMultiple() throws FileNotFoundException {
+        moveMultipleItems();
+        for(Integer line:positionnMap.keySet()){
+            System.out.println(positionnMap.get(line));
+            try {
+                topPositions = positionnMap.get(line).getFirst() + topPositions;
+            } catch (Exception e){
+                continue;
+            }
 
-
-    public void readMoveList() throws FileNotFoundException {
-        File file = new File("src/Resources/Movements.txt");
-        Scanner scnr = new Scanner(file);
-
+        }
+        return topPositions;
     }
 }
+
+

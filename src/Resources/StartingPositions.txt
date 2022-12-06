@@ -1,9 +1,9 @@
- [V] [R] [H] [B] [G] [D] [W]1
- [F] [R] [C] [G] [N] [J]2
- [J] [N] [D] [H] [F] [S] [L]3
- [V] [S] [D] [J]4
- [V] [N] [W] [Q] [R] [D] [H] [S]5
- [M] [C] [H] [G] [P]6
- [C] [H] [Z] [L] [G] [B] [J] [F]7
- [R] [J] [S]8
- [M] [V] [N] [B] [R] [S] [G] [L]9
+V R H B G D W
+F R C G N J
+J N D H F S L
+V S D J
+V N W Q R D H S
+M C H G P
+C H Z L G B J F
+R J S
+M V N B R S G L
