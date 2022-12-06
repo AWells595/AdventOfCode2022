@@ -83,19 +83,19 @@ public class CraneMovements {
             moveFrom = list.get(1);
             moveTo = list.get(2);
             ArrayList<String> itemsMoved = new ArrayList<>();
-            for(int j = 0; j < numItems; j++){
-                if(numItems > positionnMap.get(moveFrom).size()){
-                    numItems = positionnMap.get(moveFrom).size();
-                }
-                for(int k = numItems - 1; k >= 0; k--) {
-                    itemsMoved.add(positionnMap.get(moveFrom).get(k));
-                }
-                for(int k = 0; k < numItems; k++){
-                    positionnMap.get(moveFrom).removeFirst();
-                }
-                for(int k = 0; k < numItems; k++){
-                    positionnMap.get(moveTo).addFirst(itemsMoved.get(k));
-                }
+
+            if(numItems > positionnMap.get(moveFrom).size()){
+                numItems = positionnMap.get(moveFrom).size();
+            }
+
+            for(int k = numItems - 1; k >= 0; k--) {
+                itemsMoved.add(positionnMap.get(moveFrom).get(k));
+            }
+            for(int k = 0; k < numItems; k++){
+                positionnMap.get(moveFrom).removeFirst();
+            }
+            for(int k = 0; k < numItems; k++){
+                positionnMap.get(moveTo).addFirst(itemsMoved.get(k));
             }
         }
     }
