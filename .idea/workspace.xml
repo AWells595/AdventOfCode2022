@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="60fbc645-4a22-476c-a0d0-4c617abcd14f" name="Changes" comment="Days 2+3">
-      <change afterPath="$PROJECT_DIR$/src/Resources/FIleSystem.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/SpaceSaving.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Resources/TreeHeights.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/VisibleTrees.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Driver.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
